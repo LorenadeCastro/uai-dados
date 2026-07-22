@@ -1,0 +1,13 @@
+titulo: Painel Orçamentário
+subtitulo: SPLOR / SEPLAG-MG
+pasta_paginas: paginas
+pasta_saida: site
+
+# Qualquer chave do MkDocs entra aqui e tem precedência sobre o padrão do
+# UAI Dados. Útil para logo, link do repositório, plugins da organização.
+mkdocs:
+  copyright: SPLOR / SEPLAG-MG — Assessoria de Inteligência de Dados
+  # repo_url: https://github.com/splor-mg/painel-splor
+  # theme:
+  #   logo: assets/logo_mg.png
+  #   favicon: assets/favicon.png

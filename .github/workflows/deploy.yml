@@ -1,0 +1,79 @@
+# =========================================================================
+# UAI Dados — build e deploy no GitHub Pages
+#
+# O site é reconstruído em três situações:
+#   1. push na main (mudou código do painel);
+#   2. repository_dispatch "dados-atualizados" — o repositório de dados
+#      da organização dispara este evento quando o servidor publica
+#      novos arquivos .gz (ver README, seção "Integração com dados");
+#   3. agendamento diário às 7h de Brasília (10h UTC), como rede de
+#      segurança caso algum disparo se perca.
+# =========================================================================
+name: Publicar painel
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [dados-atualizados]
+  schedule:
+    - cron: "0 10 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código do painel
+        uses: actions/checkout@v4
+
+      # Se os dados morarem em OUTRO repositório da organização,
+      # descomente este passo para trazê-los para a pasta dados/:
+      # - name: Baixar repositório de dados
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: splor-mg/dados-receita
+      #     token: ${{ secrets.TOKEN_DADOS }}
+      #     path: dados
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar Poetry
+        run: pipx install poetry
+
+      - name: Instalar dependências
+        run: poetry install --no-interaction
+
+      - name: Conferir as bases
+        run: poetry run uai check dados
+
+      - name: Gerar o site estático
+        run: poetry run uai build
+
+      - name: Enviar artefato do site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

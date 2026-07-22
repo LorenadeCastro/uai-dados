@@ -1,0 +1,322 @@
+/* =========================================================================
+   UAI Dados — estilo sobre o MkDocs Material
+
+   O tema cuida de cabeçalho, navegação, busca e modo claro/escuro. Aqui
+   ficam só os componentes do painel: filtros, indicadores e a matriz.
+
+   Todas as cores saem de variáveis do próprio Material, então o painel
+   acompanha o modo escuro sem nenhuma regra duplicada.
+   ========================================================================= */
+
+:root {
+  --uai-marinho: #17273f;
+  --uai-vermelho: #b3232e;
+  --uai-negativo: #c0392b;
+  --uai-linha: var(--md-default-fg-color--lightest);
+  --uai-cabecalho-fundo: #17273f;
+  --uai-cabecalho-texto: #ffffff;
+  --uai-zebra: rgba(23, 39, 63, 0.045);
+  --uai-hover: rgba(23, 39, 63, 0.07);
+}
+
+[data-md-color-scheme="slate"] {
+  --uai-cabecalho-fundo: #0f1a2b;
+  --uai-zebra: rgba(255, 255, 255, 0.05);
+  --uai-hover: rgba(255, 255, 255, 0.07);
+  --uai-negativo: #ff8a80;
+}
+
+/* A matriz é larga: o painel usa a largura toda da janela. */
+.md-grid { max-width: 100%; }
+.md-content { padding-bottom: 2rem; }
+
+/* --- Filtros ------------------------------------------------------------ */
+.uai-filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.9rem 1.1rem;
+  align-items: end;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+  border: 1px solid var(--uai-linha);
+  border-radius: 0.4rem;
+  background: var(--md-code-bg-color);
+}
+
+.uai-filtro { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+
+.uai-filtro label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+.uai-filtro select {
+  width: 100%;
+  padding: 0.42rem 0.55rem;
+  font-size: 0.72rem;
+  font-family: inherit;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--uai-linha);
+  border-radius: 0.25rem;
+}
+
+.uai-filtro select:focus-visible,
+.uai-limpar:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+
+.uai-filtro-aviso {
+  font-size: 0.6rem;
+  line-height: 1.3;
+  color: var(--md-default-fg-color--light);
+  font-style: italic;
+}
+
+.uai-limpar, .uai-exportar {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: inherit;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--uai-linha);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: border-color 120ms, color 120ms;
+}
+
+.uai-limpar:hover, .uai-exportar:hover {
+  border-color: var(--md-accent-fg-color);
+  color: var(--md-accent-fg-color);
+}
+
+/* --- Indicadores -------------------------------------------------------- */
+.uai-indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+.uai-indicador {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--uai-linha);
+  border-left: 3px solid var(--uai-vermelho);
+  border-radius: 0.3rem;
+}
+
+.uai-indicador .rotulo {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+}
+
+.uai-indicador .valor {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.15rem;
+}
+
+/* --- Cartão da matriz --------------------------------------------------- */
+.uai-cartao {
+  border: 1px solid var(--uai-linha);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  margin-bottom: 1.6rem;
+}
+
+.uai-matriz-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  background: var(--uai-cabecalho-fundo);
+  color: var(--uai-cabecalho-texto);
+}
+
+.uai-matriz-topo h3 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: inherit;
+}
+
+.uai-matriz-topo .uai-exportar {
+  color: var(--uai-cabecalho-texto);
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.uai-matriz-topo .uai-exportar:hover {
+  color: var(--uai-cabecalho-fundo);
+  background: var(--uai-cabecalho-texto);
+  border-color: var(--uai-cabecalho-texto);
+}
+
+/* --- A matriz ------------------------------------------------------------
+   Duas coisas resolvem a leitura de uma tabela larga: a coluna de
+   descrição fica presa à esquerda e o cabeçalho ao topo. Assim dá para
+   rolar até a última coluna sem perder de vista qual linha é qual. */
+.uai-tabela-envolucro {
+  overflow: auto;
+  max-height: 78vh;
+}
+
+table.uai-matriz {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  font-size: 0.74rem;
+  margin: 0;
+}
+
+.uai-matriz thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 0.6rem 0.7rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: right;
+  vertical-align: bottom;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border-bottom: 2px solid var(--uai-linha);
+}
+
+.uai-matriz thead th.uai-matriz-desc {
+  left: 0;
+  z-index: 4;
+  text-align: left;
+  min-width: 17rem;
+  color: var(--md-default-fg-color);
+}
+
+.uai-matriz td {
+  padding: 0.34rem 0.65rem;
+  border-bottom: 1px solid var(--uai-linha);
+  white-space: nowrap;
+}
+
+.uai-matriz td.numero {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.uai-matriz td.neg { color: var(--uai-negativo); }
+
+/* Primeira coluna: presa à esquerda, e é a única que pode quebrar linha. */
+.uai-matriz td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  min-width: 17rem;
+  max-width: 26rem;
+  white-space: normal;
+  background: var(--md-default-bg-color);
+  border-right: 1px solid var(--uai-linha);
+}
+
+.uai-matriz tbody tr:nth-child(even) td { background: var(--uai-zebra); }
+.uai-matriz tbody tr:nth-child(even) td:first-child {
+  background: var(--md-default-bg-color);
+  background-image: linear-gradient(var(--uai-zebra), var(--uai-zebra));
+}
+
+.uai-matriz tbody tr:hover td,
+.uai-matriz tbody tr:hover td:first-child {
+  background-image: linear-gradient(var(--uai-hover), var(--uai-hover));
+}
+
+/* Linha de total: fixa logo abaixo do cabeçalho. */
+.uai-matriz tr.uai-nivel-total td {
+  position: sticky;
+  top: 2.1rem;
+  z-index: 2;
+  font-weight: 700;
+  font-size: 0.78rem;
+  background: var(--md-code-bg-color);
+  border-bottom: 2px solid var(--uai-linha);
+}
+.uai-matriz tr.uai-nivel-total td:first-child { z-index: 3; }
+
+/* Peso decrescente conforme desce na hierarquia. */
+.uai-matriz tr.uai-nivel-0 td { font-weight: 700; }
+.uai-matriz tr.uai-nivel-1 td { font-weight: 600; }
+.uai-matriz tr.uai-nivel-2 td,
+.uai-matriz tr.uai-nivel-3 td,
+.uai-matriz tr.uai-nivel-4 td,
+.uai-matriz tr.uai-nivel-5 td { font-weight: 400; }
+
+.uai-matriz tr.uai-expansivel { cursor: pointer; }
+
+/* O marcador +/- em largura fixa, para o texto de todos os níveis do
+   mesmo grau começar exatamente na mesma coluna. */
+.uai-marca {
+  display: inline-block;
+  width: 1.1em;
+  font-weight: 700;
+  color: var(--md-accent-fg-color);
+  user-select: none;
+}
+
+.uai-vazio {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+
+/* --- Componentes simples ------------------------------------------------ */
+.uai-componentes { display: flex; flex-direction: column; gap: 1.4rem; }
+
+table.uai-tabela { border-collapse: collapse; width: 100%; font-size: 0.72rem; }
+.uai-tabela th {
+  position: sticky; top: 0;
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--md-default-bg-color);
+  border-bottom: 2px solid var(--uai-linha);
+}
+.uai-tabela td { padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--uai-linha); }
+.uai-tabela td.numero, .uai-tabela th.numero {
+  text-align: right; font-variant-numeric: tabular-nums;
+}
+.uai-tabela-aviso {
+  margin: 0.5rem 0 0;
+  font-size: 0.65rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.uai-rodape-pagina {
+  margin-top: 2rem;
+  font-size: 0.65rem;
+  color: var(--md-default-fg-color--light);
+}
+
+@media (max-width: 76.1875em) {
+  .uai-matriz thead th.uai-matriz-desc,
+  .uai-matriz td:first-child { min-width: 15rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "painel-orcamentario"
+version = "0.3.0"
+description = "Painel orçamentário da SPLOR/SEPLAG-MG e a ferramenta UAI Dados que o gera"
+authors = ["AID / SPLOR-MG"]
+readme = "README.md"
+# A ferramenta é um pacote dentro deste mesmo projeto: um pyproject, um
+# ambiente virtual, um `poetry install`.
+packages = [{ include = "uai_dados" }]
+include = ["uai_dados/static/*"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = ">=2.0"
+plotly = ">=5.18"
+jinja2 = ">=3.1"
+click = ">=8.1"
+pyyaml = ">=6.0"
+openpyxl = ">=3.1"
+mkdocs = ">=1.6"
+mkdocs-material = ">=9.5"
+watchdog = ">=4.0"
+
+[tool.poetry.scripts]
+uai = "uai_dados.cli:principal"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
